@@ -1,74 +1,95 @@
 import React, { useCallback, useMemo } from "react";
-import {
-  DEFAULT_TRACK_LEN,
-  DEFAULT_TRACK_Y
-} from "../../../constants/constants";
+import { DEFAULT_TRACK_LEN } from "../../../constants/constants";
 
-const SettingsModeContainerStyles = {
-  position: "fixed",
-  top: "50%",
-  left: "35%",
-  width: "600px",
-  height: "50px",
-  backgroundColor: "rgba(45,0,0,0.5)",
-  transition: "all 0.5s ease-in-out",
-  zIndex: "1"
-};
-
-export default function Track({
-  id,
-  train,
-  initalX = DEFAULT_TRACK_LEN,
-  initialY = DEFAULT_TRACK_Y
-}) {
-  const [x, setX] = React.useState(initalX);
-  const [y, setY] = React.useState(initialY);
+export default function Track({ id, train, setTracksInfo, tracksInfo }) {
   const [len, setLen] = React.useState(DEFAULT_TRACK_LEN);
-  const [rotation, setRotation] = React.useState(0); // [0, 90, 180, 270
-  const [settingMode, setSettingMode] = React.useState(false);
 
-  const handleSettingMode = useCallback(
-    (e) => {
-      e.stopPropagation();
-      setSettingMode(!settingMode);
-    },
-    [settingMode]
-  );
+  const SettingsModeContainerStyles = useMemo(() => {
+    return {
+      position: "fixed",
+      top: "50%",
+      left: "35%",
+      width: "600px",
+      height: "50px",
+      backgroundColor: "white",
+      transition: "all 0.5s ease-in-out"
+    };
+  }, []);
 
   const styles = useMemo(() => {
     return {
       position: "absolute",
-      top: `${y}px`,
-      left: `${x}px`,
+      top: `${tracksInfo[id]?.y ?? 0}px`,
+      left: `${tracksInfo[id]?.x ?? 0}px`,
       width: `${len}px`,
       height: "10px",
       backgroundColor: "brown" /* For browsers that do not support gradients */,
       backgroundImage:
         "repeating-linear-gradient(90deg,white,brown 0%,black 2%)",
-      transform: `rotate(${rotation}deg)`
+      transform: `rotate(${tracksInfo[id]?.rotation ?? 0}deg)`
     };
-  }, [y, x, len, rotation]);
+  }, [id, len, tracksInfo]);
+
+  const handleModfiyTracksInfo = useCallback(
+    (changedInfo) => {
+      setTracksInfo((prev) => {
+        const newTracksInfo = { ...prev };
+        const { x, y, rotation } = changedInfo;
+        newTracksInfo[id] = {
+          ...newTracksInfo[id],
+          x,
+          y,
+          rotation
+        };
+        return newTracksInfo;
+      });
+    },
+    [id, setTracksInfo]
+  );
+
+  const handleSettingMode = useCallback(
+    (e) => {
+      setTracksInfo((prev) => {
+        const newTracksInfo = { ...prev };
+        newTracksInfo[id] = {
+          ...newTracksInfo[id],
+          settingsMode: true
+        };
+        return newTracksInfo;
+      });
+    },
+    [id, setTracksInfo]
+  );
 
   const SettingsModeContainer = useCallback(() => {
     return (
-      <div
-        style={SettingsModeContainerStyles}
-        onClick={() => setSettingMode(false)}
-      >
+      <div style={SettingsModeContainerStyles}>
         <h6> track number : {id + 1}</h6>
-        X:{x}
+        X:{tracksInfo[id].x}
         <input
           type="range"
-          value={x}
-          onChange={(e) => setX(e.target.value)}
+          value={tracksInfo[id].x}
+          onChange={(e) =>
+            handleModfiyTracksInfo({
+              x: e.target.value,
+              y: tracksInfo[id].y,
+              rotation: tracksInfo[id].rotation
+            })
+          }
           min={0}
           max={window.innerWidth}
         />
-        Y:{y}
+        Y:{tracksInfo[id].y}
         <input
           type="range"
-          value={y}
-          onChange={(e) => setY(e.target.value)}
+          value={tracksInfo[id].y}
+          onChange={(e) =>
+            handleModfiyTracksInfo({
+              y: e.target.value,
+              x: tracksInfo[id].x,
+              rotation: tracksInfo[id].rotation
+            })
+          }
           min={0}
           max={window.innerHeight}
         />
@@ -80,25 +101,59 @@ export default function Track({
           min={1}
           max={window.innerHeight}
         />
-        Angle:{rotation}
+        Angle:{tracksInfo[id].rotation}
         <input
           type="range"
-          value={rotation}
-          onChange={(e) => setRotation(e.target.value)}
+          value={tracksInfo[id].rotation}
+          onChange={(e) =>
+            handleModfiyTracksInfo({
+              y: tracksInfo[id].y,
+              x: tracksInfo[id].x,
+              rotation: e.target.value
+            })
+          }
           min={0}
           max={360}
         />
       </div>
     );
-  }, [id, len, rotation, x, y]);
+  }, [
+    SettingsModeContainerStyles,
+    handleModfiyTracksInfo,
+    id,
+    len,
+    tracksInfo
+  ]);
 
-  const TrainComponent = useCallback(() => train, [train]);
+  const closeModal = useCallback(() => {
+    setTracksInfo((prev) => {
+      const newTracksInfo = { ...prev };
+      newTracksInfo[id] = {
+        ...newTracksInfo[id],
+        settingsMode: false
+      };
+      return newTracksInfo;
+    });
+  }, [id, setTracksInfo]);
+
+  const SettingsJSX = useCallback(() => {
+    if (tracksInfo[id]?.settingsMode) {
+      return <SettingsModeContainer />;
+    } else return null;
+  }, [id, tracksInfo]);
+
+  const CloseJSX = useCallback(() => {
+    if (tracksInfo[id]?.settingsMode) {
+      return <h5 onClick={closeModal}>CLOSE MODAL</h5>;
+    } else return null;
+  }, [closeModal, id, tracksInfo]);
 
   return (
     <>
-      {settingMode && <SettingsModeContainer />}
+      <SettingsJSX />
+      <CloseJSX />
       <div style={styles} onClick={handleSettingMode}>
-        <TrainComponent />
+        {train}
       </div>
     </>
   );

@@ -8,7 +8,6 @@ function App() {
       <TrackArea />
       <TrackArea />
       <TrackArea />
-      <TrackArea />
     </div>
   );
 }

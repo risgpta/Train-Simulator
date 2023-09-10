@@ -15,8 +15,26 @@ const soundURL ="https://cdn.pixabay.com/audio/2021/09/06/audio_16da207a25.mp3"
 const TrackArea = () => {
   const audio = new Audio(soundURL);
   const [startTrain, setStartTrain] = React.useState(false);
-  const [tracks, setTracks] = React.useState(4);
-  const [speed, setSpeed] = React.useState(2); // [0, 90, 180, 270
+  const [tracks, setTracks] = React.useState(6);
+  const [speed, setSpeed] = React.useState(2); 
+
+  const tracksIdInfo = useMemo(() => {
+    const tracksInfo = {};
+    Array(tracks)
+      .fill(0)
+      .forEach((_, i) => {
+        tracksInfo[i] = {
+          x: 200*i,
+          y: 100,
+          rotation: 0,
+          settingsMode:false
+        };
+      });
+    return tracksInfo;
+  }, [tracks]);
+
+
+  const [tracksInfo,setTracksInfo] = React.useState(tracksIdInfo)
 
   const leftPosRef = useRef(0);
   let requestRef = useRef();
@@ -83,23 +101,24 @@ const TrackArea = () => {
           );
         });
 
-        console.log(trackId, left,bogies)
-
+    
       return <>{bogiesPositions}</>;
     },
     [bogieLeftPosition]
   );
+
+  
 
   const TracksList = useCallback(() => {
     const list = Array(tracks).fill(0);
     return (
       <>
         {list.map((_, i) => (
-          <Track key={i} id={i} initalX={300 * (i )} train={getBogies(i)} />
+          <Track key={i} id={i} tracksInfo={tracksInfo} train={getBogies(i)} setTracksInfo={setTracksInfo} />
         ))}
       </>
     );
-  }, [tracks, getBogies]);
+  }, [tracks, tracksInfo, getBogies]);
 
 
 
