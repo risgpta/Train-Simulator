@@ -24,7 +24,7 @@ const TrackArea = () => {
       .fill(0)
       .forEach((_, i) => {
         tracksInfo[i] = {
-          x: 200*i,
+          x: DEFAULT_TRACK_LEN*i,
           y: 100,
           rotation: 0,
           settingsMode:false
@@ -78,13 +78,12 @@ const TrackArea = () => {
       trainSound(true)
     }
     // return () => cancelAnimationFrame(requestRef.current);
-  }, [startTrain, step, trainSound]);
+  }, [startTrain,  trainSound]);
 
   const getBogies = useCallback(
     (trackId) => {
       const currentLeftPos = bogieLeftPosition;
       const currentTrackId = trackRef.current;
-
       const { left, bogies } = getLeftPos(
         currentLeftPos,
         currentTrackId,
@@ -92,7 +91,6 @@ const TrackArea = () => {
       );
 
       const bogiesPositions = [];
-
       Array(bogies)
         .fill(0)
         .forEach((_, i) => {
@@ -101,7 +99,6 @@ const TrackArea = () => {
           );
         });
 
-    
       return <>{bogiesPositions}</>;
     },
     [bogieLeftPosition]

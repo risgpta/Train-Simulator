@@ -6,8 +6,6 @@ function App() {
     <div>
       <h1>Train simulator</h1>
       <TrackArea />
-      <TrackArea />
-      <TrackArea />
     </div>
   );
 }
