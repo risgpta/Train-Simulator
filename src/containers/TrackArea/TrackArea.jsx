@@ -2,7 +2,6 @@ import React, { useCallback, useRef, useLayoutEffect, useMemo } from "react";
 import Track from "./components/Track";
 import Bogie from "./components/Bogie";
 
-import trainSound from "../../audios/train-railroad-traffic-sound-8002.mp3";
 
 import { getLeftPos } from "../../utils/bogiePositionOnTrack.utils";
 import { DEFAULT_TRACK_LEN } from "../../constants/constants";
@@ -46,7 +45,7 @@ const TrackArea = () => {
     if(!flag)
     {audio.play();}
     else{audio.pause();}
-  }, []);
+  }, [audio]);
 
   const [bogieLeftPosition, setTrainLeftPosition] = React.useState(0);
 
@@ -67,7 +66,7 @@ const TrackArea = () => {
         window.cancelAnimationFrame(requestRef.current)
       }
     },
-    [speed, startTrain, tracks, trainSound]
+    [speed, startTrain, tracks]
   );
 
   useLayoutEffect(() => {
@@ -78,7 +77,7 @@ const TrackArea = () => {
       trainSound(true)
     }
     // return () => cancelAnimationFrame(requestRef.current);
-  }, [startTrain,  trainSound]);
+  }, [startTrain]);
 
   const getBogies = useCallback(
     (trackId) => {
