@@ -25,7 +25,7 @@ export default function Track({ id, train, setTracksInfo, tracksInfo }) {
       height: "10px",
       backgroundColor: "brown" /* For browsers that do not support gradients */,
       backgroundImage:
-        "repeating-linear-gradient(90deg,white,brown 0%,black 2%)",
+        "repeating-linear-gradient(90deg,black,black 0%,brown 2%)",
       transform: `rotate(${tracksInfo[id]?.rotation ?? 0}deg)`
     };
   }, [id, len, tracksInfo]);
@@ -153,8 +153,16 @@ export default function Track({ id, train, setTracksInfo, tracksInfo }) {
       <SettingsJSX />
       <CloseJSX />
       <div style={styles} onClick={handleSettingMode}>
+        {/* <span style={{ color: "white", margin: "20px" }}>{id}</span> */}
         {train}
       </div>
     </>
   );
 }
+
+// TODO track config , tracks graph
+// more modularization
+// way to change tracks
+// UI to add this config
+// reverse train
+// go on a track oppsoite to the current track
