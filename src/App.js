@@ -1,11 +1,11 @@
 import "./App.css";
-import TrackArea from "./containers/TrackArea";
+import TracksLayout from "./containers/TracksLayout";
 
 function App() {
   return (
     <div>
-      <h1>Train simulator</h1>
-      <TrackArea />
+      <h3>Train simulator</h3>
+      <TracksLayout />
     </div>
   );
 }

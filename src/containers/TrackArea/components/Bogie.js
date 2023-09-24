@@ -7,18 +7,18 @@ const bogieStyle = {
   height: "10px"
 };
 
-export default function Bogie({ bogieLeftPosition, id }) {
+export default function Bogie({ bogieLeftPosition, id, color }) {
   const BogieComponent = useCallback(() => {
     return (
       <div
         style={{
           ...bogieStyle,
           left: bogieLeftPosition,
-          backgroundColor: "#2a2ad5"
+          backgroundColor: color
         }}
       ></div>
     );
-  }, [bogieLeftPosition]);
+  }, [bogieLeftPosition, color]);
 
   return <BogieComponent />;
 }

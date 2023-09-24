@@ -145,7 +145,7 @@ const TrackArea = () => {
       </button>
       {leftPosRef.current}
       <TracksList />
-      <div style={{marginTop:"500px"}}>
+      {/* <div style={{marginTop:"500px"}}>
         {
           tracksIdOrder.map((trackId,i) => {
             return <input key={i} type="number" label={`track id for ${i}th order`} value={trackId} onChange={(e) => {
@@ -154,7 +154,7 @@ const TrackArea = () => {
               setTracksIdOrder(newTracksIdOrder);   }}/>
           })
         }
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,7 +1,14 @@
 import React, { useCallback, useMemo } from "react";
 import { DEFAULT_TRACK_LEN } from "../../../constants/constants";
 
-export default function Track({ id, train, setTracksInfo, tracksInfo }) {
+export default function Track({
+  id,
+  train,
+  setTracksInfo,
+  tracksInfo,
+  train2 = null,
+  trains = []
+}) {
   const [len, setLen] = React.useState(DEFAULT_TRACK_LEN);
 
   const SettingsModeContainerStyles = useMemo(() => {
@@ -26,7 +33,8 @@ export default function Track({ id, train, setTracksInfo, tracksInfo }) {
       backgroundColor: "brown" /* For browsers that do not support gradients */,
       backgroundImage:
         "repeating-linear-gradient(90deg,black,black 0%,brown 2%)",
-      transform: `rotate(${tracksInfo[id]?.rotation ?? 0}deg)`
+      transform: `rotate(${tracksInfo[id]?.rotation ?? 0}deg)`,
+      transformOrigin: "0px 0px"
     };
   }, [id, len, tracksInfo]);
 
@@ -154,7 +162,7 @@ export default function Track({ id, train, setTracksInfo, tracksInfo }) {
       <CloseJSX />
       <div style={styles} onClick={handleSettingMode}>
         {/* <span style={{ color: "white", margin: "20px" }}>{id}</span> */}
-        {train}
+        {trains.map((train) => train)}
       </div>
     </>
   );
